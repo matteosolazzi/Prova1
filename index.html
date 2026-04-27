@@ -618,7 +618,6 @@
 </div>
 
 <script>
-  /* ── PROJECT DATA ── */
   const projects = [
     {
       emoji: '🎨',
@@ -646,7 +645,6 @@
     }
   ];
 
-  /* ── MODAL ── */
   function openModal(i) {
     const p = projects[i];
     document.getElementById('m-title').textContent = p.title;
@@ -671,7 +669,6 @@
 
   document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  /* ── CLOCK ── */
   function tick() {
     const now = new Date();
     const h = now.getHours() % 12, m = now.getMinutes(), s = now.getSeconds();
