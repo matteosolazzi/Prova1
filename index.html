@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0c0c0c;
+      color: #f0f0f0;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* ── GRID ── */
+    .grid {
+      max-width: 1080px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    /* ── CARD BASE ── */
+    .card {
+      background: #141414;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 20px;
+      padding: 22px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .col-2 { grid-column: span 2; }
+    .col-3 { grid-column: span 3; }
+    .col-4 { grid-column: span 4; }
+
+    .label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #4a4a4a;
+      margin-bottom: 14px;
+    }
+
+    /* ── PROFILE ── */
+    .profile-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .avatar {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+    }
+
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .name { font-size: 22px; font-weight: 700; letter-spacing: -0.4px; }
+    .role { font-size: 13px; color: #666; margin-top: 2px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(34, 197, 94, 0.1);
+      color: #22c55e;
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 4px 11px;
+      border-radius: 100px;
+      border: 1px solid rgba(34, 197, 94, 0.2);
+      margin-bottom: 14px;
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink { 0%,100% { opacity:1 } 50% { opacity:.3 } }
+
+    .bio { font-size: 14px; line-height: 1.7; color: #aaa; }
+
+    /* ── CLOCK ── */
+    .clock-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      gap: 12px;
+    }
+
+    .clock-face {
+      width: 96px; height: 96px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      background: #1a1a1a;
+      position: relative;
+    }
+
+    .hand {
+      position: absolute;
+      left: 50%;
+      bottom: 50%;
+      transform-origin: bottom center;
+      transform: translateX(-50%) rotate(0deg);
+      border-radius: 4px;
+    }
+
+    .h-hour   { width: 3px; height: 27px; background: #fff; margin-left: -1.5px; }
+    .h-minute { width: 2px; height: 36px; background: #bbb; margin-left: -1px; }
+    .h-second { width: 1.5px; height: 40px; background: #f87171; margin-left: -0.75px; }
+
+    .clock-center {
+      position: absolute;
+      width: 7px; height: 7px;
+      background: #fff;
+      border-radius: 50%;
+      top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      z-index: 5;
+    }
+
+    .clock-time { font-size: 12px; color: #555; font-variant-numeric: tabular-nums; }
+
+    /* ── LOCATION ── */
+    .map-placeholder {
+      width: 100%;
+      aspect-ratio: 4/3;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #181818, #222);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .city { font-size: 15px; font-weight: 600; }
+    .tz   { font-size: 12px; color: #555; margin-top: 3px; }
+
+    /* ── SKILLS ── */
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+
+    .tag {
+      padding: 5px 13px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      font-size: 12.5px;
+      color: #ccc;
+    }
+
+    /* ── STAT ── */
+    .stat-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #111117;
+      border-color: rgba(99,102,241,0.15);
+    }
+
+    .stat-num {
+      font-size: 52px;
+      font-weight: 800;
+      letter-spacing: -2px;
+      background: linear-gradient(135deg, #fff 30%, #555);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1;
+    }
+
+    .stat-desc { font-size: 12px; color: #555; margin-top: 6px; }
+
+    /* ── SOCIAL ── */
+    .socials { display: flex; flex-direction: column; gap: 7px; }
+
+    .social-item {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      text-decoration: none;
+      color: #ccc;
+      font-size: 13px;
+      transition: background .2s, border-color .2s;
+    }
+
+    .social-item:hover { background: rgba(255,255,255,0.07); border-color: rgba(255,255,255,0.13); }
+
+    .s-icon {
+      width: 30px; height: 30px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .s-handle { margin-left: auto; font-size: 11.5px; color: #444; }
+
+    /* ── EXPERIENCE ── */
+    .exp-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .exp-item { display: flex; align-items: flex-start; gap: 12px; }
+
+    .exp-icon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.07);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .exp-role  { font-size: 13.5px; font-weight: 600; }
+    .exp-where { font-size: 12px; color: #555; margin-top: 2px; }
+    .exp-year  { margin-left: auto; font-size: 11.5px; color: #444; white-space: nowrap; padding-top: 2px; }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .project-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px;
+      padding: 18px;
+      cursor: pointer;
+      transition: background .2s, border-color .2s, transform .2s;
+    }
+
+    .project-card:hover {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.13);
+      transform: translateY(-2px);
+    }
+
+    .p-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #1d1d1d, #272727);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin-bottom: 13px;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .p-name { font-size: 15px; font-weight: 600; }
+    .p-sub  { font-size: 12px; color: #555; margin-top: 3px; }
+
+    .p-tags {
+      display: flex; gap: 5px; flex-wrap: wrap; margin-top: 10px;
+    }
+
+    .p-tag {
+      font-size: 11px;
+      padding: 3px 9px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 100px;
+      color: #666;
+    }
+
+    /* ── CONTACT ── */
+    .contact-card {
+      background: linear-gradient(135deg, #111117, #0e0e14);
+      border-color: rgba(99,102,241,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .contact-text h3 { font-size: 18px; font-weight: 700; }
+    .contact-text p  { font-size: 13px; color: #555; margin-top: 4px; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 10px 22px;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.09);
+      border: 1px solid rgba(255,255,255,0.13);
+      color: #fff;
+      font-size: 13.5px;
+      font-weight: 500;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .2s;
+      font-family: inherit;
+    }
+
+    .btn:hover { background: rgba(255,255,255,0.15); }
+
+    /* ── MODAL ── */
+    .overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.72);
+      backdrop-filter: blur(10px);
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s;
+    }
+
+    .overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: #161616;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 22px;
+      padding: 28px;
+      max-width: 540px;
+      width: 100%;
+      transform: scale(.96) translateY(8px);
+      transition: transform .25s;
+    }
+
+    .overlay.open .modal { transform: scale(1) translateY(0); }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+    }
+
+    .modal-title    { font-size: 20px; font-weight: 700; }
+    .modal-subtitle { font-size: 12.5px; color: #555; margin-top: 4px; }
+
+    .close-btn {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.07);
+      border: none; cursor: pointer;
+      color: #888; font-size: 17px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, color .2s;
+      flex-shrink: 0;
+    }
+
+    .close-btn:hover { background: rgba(255,255,255,0.14); color: #fff; }
+
+    .modal-thumb {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 56px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .modal-desc {
+      font-size: 14px;
+      line-height: 1.75;
+      color: #aaa;
+      margin-bottom: 16px;
+    }
+
+    .modal-tags { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 22px; }
+
+    .modal-tag {
+      font-size: 11.5px;
+      padding: 4px 12px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 100px;
+      color: #888;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
+      .col-3, .col-4 { grid-column: span 2; }
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 500px) {
+      body { padding: 10px; }
+      .grid { grid-template-columns: 1fr; gap: 8px; }
+      .col-2, .col-3, .col-4 { grid-column: span 1; }
+      .projects-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="grid">
+
+  <!-- PROFILE -->
+  <div class="card col-2">
+    <div class="profile-top">
+      <div class="avatar">👤</div>
+      <div>
+        <div class="name">Il Tuo Nome</div>
+        <div class="role">Designer &amp; Developer</div>
+      </div>
+    </div>
+    <div class="badge"><span class="dot"></span>Disponibile per nuovi progetti</div>
+    <p class="bio">Scrivi qui una breve presentazione su di te, cosa fai e quali sono le tue passioni. Modifica questo testo con le tue informazioni personali.</p>
+  </div>
+
+  <!-- CLOCK -->
+  <div class="card">
+    <div class="label">Ora locale</div>
+    <div class="clock-wrap">
+      <div class="clock-face" id="clock">
+        <div class="hand h-hour"   id="hh"></div>
+        <div class="hand h-minute" id="hm"></div>
+        <div class="hand h-second" id="hs"></div>
+        <div class="clock-center"></div>
+      </div>
+      <div class="clock-time" id="ct">--:--</div>
+    </div>
+  </div>
+
+  <!-- LOCATION -->
+  <div class="card">
+    <div class="label">Posizione</div>
+    <div class="map-placeholder">🗺️</div>
+    <div class="city">Milano, Italia</div>
+    <div class="tz">UTC+1 · CET</div>
+  </div>
+
+  <!-- SKILLS -->
+  <div class="card col-2">
+    <div class="label">Skills</div>
+    <div class="tags">
+      <span class="tag">Figma</span>
+      <span class="tag">React</span>
+      <span class="tag">TypeScript</span>
+      <span class="tag">Node.js</span>
+      <span class="tag">CSS / Tailwind</span>
+      <span class="tag">UI/UX Design</span>
+      <span class="tag">Framer</span>
+      <span class="tag">Illustrator</span>
+    </div>
+  </div>
+
+  <!-- STAT 1 -->
+  <div class="card stat-card">
+    <div class="label">Progetti</div>
+    <div>
+      <div class="stat-num">12+</div>
+      <div class="stat-desc">Completati con successo</div>
+    </div>
+  </div>
+
+  <!-- STAT 2 -->
+  <div class="card stat-card">
+    <div class="label">Esperienza</div>
+    <div>
+      <div class="stat-num">5+</div>
+      <div class="stat-desc">Anni nel settore</div>
+    </div>
+  </div>
+
+  <!-- SOCIAL -->
+  <div class="card col-2">
+    <div class="label">Social &amp; Contatti</div>
+    <div class="socials">
+      <a href="#" class="social-item">
+        <div class="s-icon">𝕏</div>
+        Twitter / X
+        <span class="s-handle">@username</span>
+      </a>
+      <a href="#" class="social-item">
+        <div class="s-icon" style="font-size:12px;font-weight:700;">in</div>
+        LinkedIn
+        <span class="s-handle">→</span>
+      </a>
+      <a href="#" class="social-item">
+        <div class="s-icon" style="font-size:11px;font-weight:700;">GH</div>
+        GitHub
+        <span class="s-handle">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- EXPERIENCE -->
+  <div class="card col-2">
+    <div class="label">Esperienza</div>
+    <div class="exp-list">
+      <div class="exp-item">
+        <div class="exp-icon">🏢</div>
+        <div>
+          <div class="exp-role">Azienda ABC</div>
+          <div class="exp-where">Senior Designer</div>
+        </div>
+        <div class="exp-year">2022 – oggi</div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-icon">🚀</div>
+        <div>
+          <div class="exp-role">Startup XYZ</div>
+          <div class="exp-where">UI Developer</div>
+        </div>
+        <div class="exp-year">2020 – 2022</div>
+      </div>
+      <div class="exp-item">
+        <div class="exp-icon">🎓</div>
+        <div>
+          <div class="exp-role">Università</div>
+          <div class="exp-where">Laurea in Design</div>
+        </div>
+        <div class="exp-year">2016 – 2020</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="card col-4">
+    <div class="label">Progetti selezionati</div>
+    <div class="projects-grid">
+
+      <div class="project-card" onclick="openModal(0)">
+        <div class="p-thumb">🎨</div>
+        <div class="p-name">Design System</div>
+        <div class="p-sub">UI Kit Enterprise</div>
+        <div class="p-tags">
+          <span class="p-tag">Figma</span>
+          <span class="p-tag">UI/UX</span>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="openModal(1)">
+        <div class="p-thumb">🌐</div>
+        <div class="p-name">Web App Dashboard</div>
+        <div class="p-sub">Analytics Platform</div>
+        <div class="p-tags">
+          <span class="p-tag">React</span>
+          <span class="p-tag">TypeScript</span>
+        </div>
+      </div>
+
+      <div class="project-card" onclick="openModal(2)">
+        <div class="p-thumb">📱</div>
+        <div class="p-name">Mobile App</div>
+        <div class="p-sub">Productivity Tool</div>
+        <div class="p-tags">
+          <span class="p-tag">iOS</span>
+          <span class="p-tag">React Native</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CONTACT CTA -->
+  <div class="card col-4 contact-card">
+    <div class="contact-text">
+      <h3>Lavoriamo insieme?</h3>
+      <p>Sono disponibile per collaborazioni, freelance e nuovi progetti.</p>
+    </div>
+    <a href="mailto:tua@email.com" class="btn">Scrivimi ✉️</a>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="closeOutside(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title"   id="m-title"></div>
+        <div class="modal-subtitle" id="m-sub"></div>
+      </div>
+      <button class="close-btn" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-thumb" id="m-thumb"></div>
+    <div class="modal-desc"  id="m-desc"></div>
+    <div class="modal-tags"  id="m-tags"></div>
+    <a href="#" class="btn" id="m-link" target="_blank">Vedi progetto →</a>
+  </div>
+</div>
+
+<script>
+  /* ── PROJECT DATA ── */
+  const projects = [
+    {
+      emoji: '🎨',
+      title: 'Design System',
+      sub: 'UI Kit Enterprise · 2023',
+      desc: 'Un design system completo sviluppato per standardizzare l\'interfaccia di un\'applicazione enterprise. Include oltre 200 componenti, token di design, documentazione Storybook e linee guida per l\'accessibilità WCAG 2.1.',
+      tags: ['Figma', 'UI/UX', 'Design System', 'Accessibilità', 'Storybook'],
+      link: '#'
+    },
+    {
+      emoji: '🌐',
+      title: 'Web App Dashboard',
+      sub: 'Analytics Platform · 2023',
+      desc: 'Dashboard analytics per la visualizzazione e l\'analisi di grandi volumi di dati in tempo reale. Integra grafici interattivi, filtri avanzati e un sistema di alert personalizzabili con notifiche push.',
+      tags: ['React', 'TypeScript', 'D3.js', 'Node.js', 'PostgreSQL'],
+      link: '#'
+    },
+    {
+      emoji: '📱',
+      title: 'Mobile App',
+      sub: 'Productivity Tool · 2022',
+      desc: 'Applicazione mobile per la gestione del tempo e la produttività personale. Include timer Pomodoro, tracking delle abitudini, statistiche settimanali e sincronizzazione cloud. Disponibile su iOS e Android.',
+      tags: ['React Native', 'iOS', 'Android', 'Firebase', 'UX Design'],
+      link: '#'
+    }
+  ];
+
+  /* ── MODAL ── */
+  function openModal(i) {
+    const p = projects[i];
+    document.getElementById('m-title').textContent = p.title;
+    document.getElementById('m-sub').textContent   = p.sub;
+    document.getElementById('m-thumb').textContent = p.emoji;
+    document.getElementById('m-desc').textContent  = p.desc;
+    document.getElementById('m-link').href         = p.link;
+    document.getElementById('m-tags').innerHTML =
+      p.tags.map(t => `<span class="modal-tag">${t}</span>`).join('');
+    document.getElementById('overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeOutside(e) {
+    if (e.target === document.getElementById('overlay')) closeModal();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  /* ── CLOCK ── */
+  function tick() {
+    const now = new Date();
+    const h = now.getHours() % 12, m = now.getMinutes(), s = now.getSeconds();
+    const hDeg = h * 30 + m * 0.5;
+    const mDeg = m * 6;
+    const sDeg = s * 6;
+    document.getElementById('hh').style.transform = `translateX(-50%) rotate(${hDeg}deg)`;
+    document.getElementById('hm').style.transform = `translateX(-50%) rotate(${mDeg}deg)`;
+    document.getElementById('hs').style.transform = `translateX(-50%) rotate(${sDeg}deg)`;
+    document.getElementById('ct').textContent =
+      now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+  }
+  tick();
+  setInterval(tick, 1000);
+</script>
+</body>
+</html>
