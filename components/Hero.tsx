@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import FadeIn from "./FadeIn";
 import { useLanguage } from "@/lib/useLanguage";
 
 function useCountUp(target: string, duration = 900) {
@@ -21,7 +21,6 @@ function useCountUp(target: string, duration = 900) {
     const numeric = parseFloat(numericMatch[0]);
     const prefix = target.slice(0, target.indexOf(numericMatch[0]));
     const suffix = target.slice(target.indexOf(numericMatch[0]) + numericMatch[0].length);
-    const isDecimal = target.includes(".");
 
     const start = performance.now();
 
@@ -30,10 +29,7 @@ function useCountUp(target: string, duration = 900) {
       const progress = Math.min(elapsed / duration, 1);
       const ease = 1 - Math.pow(1 - progress, 3);
       const current = numeric * ease;
-      const formatted = isDecimal
-        ? current.toFixed(0)
-        : Math.round(current).toString();
-      setDisplay(`${prefix}${formatted}${suffix}`);
+      setDisplay(`${prefix}${Math.round(current)}${suffix}`);
       if (progress < 1) requestAnimationFrame(step);
     }
 
@@ -64,13 +60,7 @@ export default function Hero() {
   const { t } = useLanguage();
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="py-20 md:py-32"
-    >
+    <FadeIn className="py-20 md:py-32">
       <h1
         className="font-semibold tracking-tight leading-none mb-4"
         style={{
@@ -89,10 +79,7 @@ export default function Hero() {
         {t.hero.oneliner}
       </p>
 
-      <p
-        className="text-sm mb-12"
-        style={{ color: "var(--gray-1)" }}
-      >
+      <p className="text-sm mb-12" style={{ color: "var(--gray-1)" }}>
         {t.hero.location}
       </p>
 
@@ -109,6 +96,6 @@ export default function Hero() {
       >
         {t.hero.cta} →
       </a>
-    </motion.section>
+    </FadeIn>
   );
 }

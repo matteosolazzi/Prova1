@@ -1,7 +1,12 @@
 import type { NextConfig } from "next";
 
+const basePath = process.env.GITHUB_PAGES === "true" ? "/Prova1" : "";
+
 const nextConfig: NextConfig = {
-  /* config options here */
+  output: "export",
+  basePath,
+  env: { NEXT_PUBLIC_BASE_PATH: basePath },
+  images: { unoptimized: true },
 };
 
 export default nextConfig;

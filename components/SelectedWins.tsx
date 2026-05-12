@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import FadeIn from "./FadeIn";
 import { useLanguage } from "@/lib/useLanguage";
 
 const revenueGrowth = [
@@ -37,7 +37,6 @@ function RevenueChart() {
           const y = chartH - barHeight;
           const isFirst = i === 0;
           const isLast = i === revenueGrowth.length - 1;
-
           return (
             <g key={d.quarter}>
               <rect
@@ -61,13 +60,8 @@ function RevenueChart() {
             </g>
           );
         })}
-        {/* Y axis labels */}
-        <text x="0" y={chartH} fontSize="10" fill="#888888" dominantBaseline="auto">
-          ×1
-        </text>
-        <text x="0" y="10" fontSize="10" fill="#888888" dominantBaseline="hanging">
-          ×8
-        </text>
+        <text x="0" y={chartH} fontSize="10" fill="#888888" dominantBaseline="auto">×1</text>
+        <text x="0" y="10" fontSize="10" fill="#888888" dominantBaseline="hanging">×8</text>
       </svg>
     </div>
   );
@@ -77,24 +71,16 @@ export default function SelectedWins() {
   const { t } = useLanguage();
 
   return (
-    <motion.section
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-      className="py-20 md:py-32"
-    >
+    <FadeIn className="py-20 md:py-32">
       <h2
         className="font-semibold mb-4 tracking-tight"
         style={{ fontSize: "1.5rem", color: "var(--foreground)", letterSpacing: "-0.01em" }}
       >
         {t.selectedWins.title}
       </h2>
-
       <p className="text-base mb-10 leading-relaxed" style={{ color: "var(--gray-1)" }}>
         {t.selectedWins.intro}
       </p>
-
       <ul className="flex flex-col gap-5 mb-12">
         {t.selectedWins.bullets.map((b, i) => (
           <li key={i} className="text-base leading-relaxed flex gap-3" style={{ color: "var(--foreground)" }}>
@@ -106,17 +92,15 @@ export default function SelectedWins() {
           </li>
         ))}
       </ul>
-
       <div className="mb-3">
         <RevenueChart />
       </div>
       <p className="text-xs italic mb-10" style={{ color: "var(--gray-1)" }}>
         {t.selectedWins.chartCaption}
       </p>
-
       <p className="text-sm italic" style={{ color: "var(--gray-1)" }}>
         {t.selectedWins.awards}
       </p>
-    </motion.section>
+    </FadeIn>
   );
 }
